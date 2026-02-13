@@ -17,12 +17,14 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
+import org.apache.http.impl.conn.SystemDefaultRoutePlanner;
 import org.apache.http.impl.cookie.BasicClientCookie;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.net.ProxySelector;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -65,11 +67,13 @@ public class HttpHelper {
         }
 
         if (request.getProxy() != null) {
-
             httpClientBuilder.setRoutePlanner(new DefaultProxyRoutePlanner(new HttpHost(
                     request.getProxy().get("host"),
                     Integer.parseInt(request.getProxy().get("port"))
             )));
+        } else {
+            httpClientBuilder.useSystemProperties();
+            httpClientBuilder.setRoutePlanner(new SystemDefaultRoutePlanner(ProxySelector.getDefault()));
         }
 
         HttpClient httpClient;

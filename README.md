@@ -33,3 +33,31 @@ javac -cp "libs/*" \
 $ java -cp "src:libs/*" com.anti_captcha.Main
 ```
 
+### Proxy for API requests
+Set JVM system properties in the host application (library usage works the same as console apps).
+
+Programmatic (inside your app, before using the library):
+```java
+System.setProperty("http.proxyHost", "proxy.example.com");
+System.setProperty("http.proxyPort", "8080");
+System.setProperty("https.proxyHost", "proxy.example.com");
+System.setProperty("https.proxyPort", "8080");
+// Or SOCKS5:
+// System.setProperty("socksProxyHost", "proxy.example.com");
+// System.setProperty("socksProxyPort", "1080");
+```
+
+HTTP/HTTPS proxy (JVM args):
+```bash
+java -Dhttp.proxyHost=proxy.example.com -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy.example.com -Dhttps.proxyPort=8080 -cp "src:libs/*" com.anti_captcha.Main
+```
+
+SOCKS5 proxy (JVM args):
+```bash
+java -DsocksProxyHost=proxy.example.com -DsocksProxyPort=1080 -cp "src:libs/*" com.anti_captcha.Main
+```
+
+Non-proxy hosts (optional):
+```bash
+java -Dhttp.nonProxyHosts="localhost|127.0.0.1" -cp "src:libs/*" com.anti_captcha.Main
+```
